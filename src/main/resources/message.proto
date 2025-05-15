@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.exchange.system.protocol";
+option java_outer_classname = "Message";
+
+message ProviderMessage {
+  message MessageItem {
+    string symbol = 1;
+    double price = 2;
+    bool priceChange = 3;
+  };
+
+  repeated MessageItem items = 1;
+}
