@@ -20,14 +20,15 @@ Operating Environment: Implemented using Java 1.8, requires the Java 1.8 environ
 Dependencies: The project depends on Spring, Guava, Protobuf, JUnit, and SQLite.
 
 ## Usage Introduction
-
+```
 Compile：./gradlew clean build
 Run：java -jar ./build/libs/assets-0.0.1-SNAPSHOT.jar
-
+```
 ## Information on Held Assets
 
 Position information (including stock codes and the number of stocks/contracts in the portfolio) is saved in a CSV position file.
 The file is located at asset/src/main/resources/positionfile.csv and can be provided according to the specified format.
+
 
 ## Configuration of Securities Assets Information
 
