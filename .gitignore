@@ -5,6 +5,7 @@ build/
 target/
 # Ignore dependency directories
 .gradle/
+*/checksums/*
 *.bin
 *.lock
 node_modules/
