@@ -1,0 +1,13 @@
+# Ignore compiled Java class files
+*.class
+# Ignore build directories
+build/
+target/
+# Ignore dependency directories
+.gradle/
+node_modules/
+# Ignore IDE files
+.idea/
+*.iml
+# Ignore SQLite database files
+*.db

@@ -87,4 +87,29 @@ public class DB {
         }
         return rowsAffected > 0;
     }
+
+    public static StockData getDataBySymbol(String symbol) {
+        String SELECT_SQL = "SELECT * FROM SECURITY_DEFINITIONS WHERE symbol = ? LIMIT 1";
+        try(Connection connection = DriverManager.getConnection(URL);
+                PreparedStatement statement = connection.prepareStatement(SELECT_SQL);) {
+            statement.setQueryTimeout(30);
+            statement.setString(1, symbol);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                StockData stockData = new StockData.Builder()
+                        .productType(rs.getString("type"))
+                        .symbol(rs.getString("symbol"))
+                        .curPrice(rs.getDouble("cur_price"))
+                        .strikePrice(rs.getDouble("strike_price"))
+                        .expectedReturn(rs.getDouble("expected_return"))
+                        .annualizedStandardDeviation(rs.getDouble("annualized_standard_deviation"))
+                        .maturity(rs.getString("maturity"))
+                        .build();
+                return stockData;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return null;
+    }
 }
