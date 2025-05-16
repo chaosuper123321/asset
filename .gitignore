@@ -5,6 +5,8 @@ build/
 target/
 # Ignore dependency directories
 .gradle/
+*.bin
+*.lock
 node_modules/
 # Ignore IDE files
 .idea/
