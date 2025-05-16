@@ -5,7 +5,7 @@ import com.exchange.system.constants.Constants;
 import com.exchange.system.utils.StandardNormalRandom;
 
 public class StockPriceCalc {
-    public static final long CYCLE_TIME = Constants.ProviderSchedulePeriodSeconds;
+    public static final long CYCLE_TIME = Constants.PROVIDER_SCHEDULE_PERIOD_SECONDS;
 
     public static double calcNewPrice(double curPrice
             , double expectedReturn

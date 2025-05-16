@@ -10,7 +10,7 @@ public class OutputAssets {
 
     //TODO, add 四舍五入
     public static void display(int index, List<MessageItem> messageItemList ) {
-        TreeMap<String, Float> csvData =  PositionData.getInstance().getData();
+        TreeMap<String, Double> csvData =  PositionData.getInstance().getData();
 
         System.out.println("## " +index+ " Market Data Update");
         displayStockChange(messageItemList);

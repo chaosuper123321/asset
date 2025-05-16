@@ -12,8 +12,8 @@ public class CsvUtil {
 
     public static final String FILE_NAME = "positionfile.csv";
 
-    public static TreeMap<String, Float> getPositionDataFromCSV() {
-        TreeMap<String, Float> ret = new TreeMap<>();
+    public static TreeMap<String, Double> getPositionDataFromCSV() {
+        TreeMap<String, Double> ret = new TreeMap<>();
         List<String[]> data = new ArrayList<>();
         ClassLoader classLoader = CsvUtil.class.getClassLoader();
 
@@ -41,7 +41,7 @@ public class CsvUtil {
             return null;
         }
         for (String[] row : data) {
-            ret.put(row[0], Float.parseFloat(row[1]));
+            ret.put(row[0], Double.parseDouble(row[1]));
         }
         return ret;
     }

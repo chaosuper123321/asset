@@ -28,7 +28,6 @@ public class SubscribeThread implements Runnable {
                     index ++;
                 }
             } catch (InterruptedException | InvalidProtocolBufferException e) {
-                e.printStackTrace();
                 break;
             }
         }

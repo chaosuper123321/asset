@@ -7,48 +7,57 @@ import com.exchange.system.subscriber.SubscribeThread;
 import com.exchange.system.utils.CsvUtil;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
+
+@SpringBootApplication
+@ComponentScan(basePackages = {"com.exchange.system"})
 public class AssetsApplication {
 
+
+    private final BlockingDeque<byte[]> priceMessages = new LinkedBlockingDeque<>(1024);
     public static void main(String[] args) {
-        // 1.read positionfile.csv file at path : assets/src/main/resources/
-        TreeMap<String, Float> data = CsvUtil.getPositionDataFromCSV();
+        SpringApplication.run(AssetsApplication.class, args);
+    }
+
+    @PostConstruct
+    public void initDataAndStartProvide() {
+        TreeMap<String, Double> data = CsvUtil.getPositionDataFromCSV();
         if (data != null) {
             PositionData.getInstance().setData(data);
         } else {
-            System.err.println("csv file not found");
-            return;
+            throw new IllegalStateException("CSV file not found");
         }
 
-        // 2.read stock data from SQLite
         boolean ret = DB.createDatabaseAndInitData();
         if (!ret) {
-            System.err.println("read stock data from sqllite failed");
-            return;
+            throw new IllegalStateException("Failed to read stock data from SQLite");
         }
 
-        // 3. provider calc price and publish price info
-        BlockingDeque<byte[]> priceMessages = new LinkedBlockingDeque<>();
         ProviderSchedule.start(priceMessages);
-
-        // 4. subscribe result
-        Thread subscribeThread = new Thread(new SubscribeThread(priceMessages));
-        subscribeThread.start();
-
-        try {
-            subscribeThread.join();
-        } catch (InterruptedException e) {
-            System.err.println(e.getMessage());
-            Thread.currentThread().interrupt();
-        }
-
-        // 5. add shutdown hook
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            ProviderSchedule.shutdown();
-            subscribeThread.interrupt();
-            priceMessages.clear();
-        }));
     }
 
+    @Bean
+    public CommandLineRunner startSubscriber(
+            Executor taskExecutor) {
+        return args -> {
+            taskExecutor.execute(new SubscribeThread(priceMessages));
+        };
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        ProviderSchedule.shutdown();
+        priceMessages.clear();
+    }
 }

@@ -12,8 +12,8 @@ public class ProviderSchedule {
     public static void start(BlockingDeque<byte[]> blockingDeque) {
         Runnable task = new ProviderThread(blockingDeque);
         scheduler.scheduleAtFixedRate(task,
-                Constants.ProviderScheduleDelaySeconds,
-                Constants.ProviderSchedulePeriodSeconds,
+                Constants.PROVIDER_SCHEDULE_DELAY_SECONDS,
+                Constants.PROVIDER_SCHEDULE_PERIOD_SECONDS,
                 TimeUnit.SECONDS);
     }
     public static void shutdown() {
