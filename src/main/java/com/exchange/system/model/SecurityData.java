@@ -1,20 +1,20 @@
 package com.exchange.system.model;
 
 
-public class StockData {
+public class SecurityData {
 
     private ProductType productType;
     private String symbol;
-    private double curPrice;
+    private double currentPrice;
     private double strikePrice;
     private double expectedReturn;
     private double annualizedStandardDeviation;
     private String maturity;
 
-    private StockData(Builder builder) {
+    private SecurityData(Builder builder) {
         this.productType = builder.productType;
         this.symbol = builder.symbol;
-        this.curPrice = builder.curPrice;
+        this.currentPrice = builder.curPrice;
         this.strikePrice = builder.strikePrice;
         this.expectedReturn = builder.expectedReturn;
         this.annualizedStandardDeviation = builder.annualizedStandardDeviation;
@@ -29,12 +29,12 @@ public class StockData {
         return symbol;
     }
 
-    public double getCurPrice() {
-        return curPrice;
+    public double getCurrentPrice() {
+        return currentPrice;
     }
 
-    public void setCurPrice(double curPrice) {
-        this.curPrice = curPrice;
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public double getStrikePrice() {
@@ -101,14 +101,14 @@ public class StockData {
             return this;
         }
 
-        public StockData build() {
+        public SecurityData build() {
             if (symbol == null || symbol.trim().isEmpty()) {
                 throw new IllegalStateException("Symbol cannot be null or empty");
             }
             if (curPrice < 0) {
                 throw new IllegalStateException("Price cannot be negative");
             }
-            return new StockData(this);
+            return new SecurityData(this);
         }
     }
 

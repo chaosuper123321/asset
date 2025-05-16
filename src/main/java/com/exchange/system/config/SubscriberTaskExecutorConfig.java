@@ -1,16 +1,19 @@
-package com.exchange.system.beans;
+package com.exchange.system.config;
 
 import java.util.concurrent.Executor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-public class TaskExecutor {
-    @Bean
-    public Executor taskExecutor() {
+@Configuration
+public class SubscriberTaskExecutorConfig {
+
+    @Bean("taskExecutor")
+    public Executor configureTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(1);
         executor.setMaxPoolSize(1);
-        executor.setQueueCapacity(0);
+        executor.setQueueCapacity(1024);
         executor.setThreadNamePrefix("SubscriberThread-");
         executor.initialize();
         return executor;

@@ -22,12 +22,18 @@ Dependencies: The project depends on Spring, Guava, Protobuf, JUnit, and SQLite.
 ## Usage Introduction
 ```
 Compile：./gradlew clean build
-Run：java -jar ./build/libs/assets-0.0.1-SNAPSHOT.jar
+Run：java -jar ./build/libs/assets-1.0.1.jar
 ```
+
+## Tests
+```
+./gradlew clean test
+```
+
 ## Information on Held Assets
 
 Position information (including stock codes and the number of stocks/contracts in the portfolio) is saved in a CSV position file.
-The file is located at asset/src/main/resources/positionfile.csv and can be provided according to the specified format.
+The file is located at asset/src/main/resources/positionfile.csv and must be provided in the specified CSV format.
 
 
 ## Configuration of Securities Assets Information
@@ -37,7 +43,7 @@ The table structure is defined as follows:
 ```
 | Field                         | Type          | Content |
 | type                          | INTEGER       | Security type (stock, call option, put option) |
-| symbol                        | CHAR(32)      | Security code  |
+| symbol                        | CHAR(32)      | Symbol  |
 | cur_price                     | VARCHAR(128)  | Current price |
 | strike_price                  | REAL          | Strike price  |
 | expected_return               | REAL          | Expected annualized return |

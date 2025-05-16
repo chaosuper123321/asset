@@ -1,10 +1,10 @@
-package com.exchange.system.assets;
+package com.exchange.system.application;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
-public class EuropeanOptionPriceCalcTest {
+public class EuropeanOptionPriceCalculatorTest {
 
     @Test
     public void test1213() {

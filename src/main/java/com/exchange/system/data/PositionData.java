@@ -1,14 +1,17 @@
-package com.exchange.system.data.csv;
+package com.exchange.system.data;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 public class PositionData {
-    private TreeMap<String, Double> data = new TreeMap<>();
+
+    private HashMap<String, Double> positions = new HashMap<>();
 
     private static class SingletonHolder {
+
         private static final PositionData INSTANCE = new PositionData();
     }
+
     private PositionData() {
     }
 
@@ -16,12 +19,12 @@ public class PositionData {
         return SingletonHolder.INSTANCE;
     }
 
-    public TreeMap<String, Double> getData() {
-        return data;
+    public HashMap<String, Double> getPositions() {
+        return positions;
     }
 
-    public void setData(TreeMap<String, Double> newData) {
-        data.putAll(newData);
+    public void updatePositions(TreeMap<String, Double> newPositions) {
+        positions.putAll(newPositions);
     }
 
 }

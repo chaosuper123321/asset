@@ -1,18 +1,19 @@
-package com.exchange.system.utils;
+package com.exchange.system.pricing;
 
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class PriceUtil {
-    public static final double EPSILON = 1e-2;
+public class FinancialUtil {
 
-    public static boolean areEqual(double a, double b, double epsilon) {
-        return Math.abs(a - b) < epsilon;
+    public static final double PRICE_COMPARISON_TOLERANCE = 0.01;
+
+    public static boolean areEqual(double price1, double price2, double epsilon) {
+        return Math.abs(price1 - price2) < epsilon;
     }
 
-    public static double calculateYearsToMaturity(String maturity) {
+    public static double yearsToMaturity(String maturity) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate maturityDate = LocalDate.parse(maturity, formatter);
@@ -25,5 +26,6 @@ public class PriceUtil {
             return -1.0;
         }
     }
+
 
 }
