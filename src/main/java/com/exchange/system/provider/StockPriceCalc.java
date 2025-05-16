@@ -7,15 +7,16 @@ import com.exchange.system.utils.StandardNormalRandom;
 public class StockPriceCalc {
     public static final long CYCLE_TIME = Constants.ProviderSchedulePeriodSeconds;
 
-    public static double calcNewPrice(double S, double u, double q) {
+    public static double calcNewPrice(double curPrice
+            , double expectedReturn
+            , double annualizedStandardDeviation) {
         double e = StandardNormalRandom.nextStandardNormal();
         double t = divideByCycle(CYCLE_TIME);
-        double delta = u * t + q * e * Math.sqrt(t);
-        return S * (1 + delta);
+        double delta = expectedReturn * t + annualizedStandardDeviation * e * Math.sqrt(t);
+        return curPrice * (1 + delta);
     }
 
     public static double divideByCycle(long seconds) {
         return (double) seconds / Constants.CYCLE_SECONDS;
     }
-
 }

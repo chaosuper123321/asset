@@ -17,25 +17,23 @@ public class AssetsApplication {
         if (data != null) {
             PositionData.getInstance().setData(data);
         } else {
-            System.err.println("positionfile.csv file not found");
-            System.err.println(
-                    "please check you file : assets/src/main/resources/positionfile.csv exists");
+            System.err.println("csv file not found");
             return;
         }
 
-        // 2.read stock data from sqllite
-        boolean ret = DB.createDateBaseAndInitData();
+        // 2.read stock data from SQLite
+        boolean ret = DB.createDatabaseAndInitData();
         if (!ret) {
             System.err.println("read stock data from sqllite failed");
             return;
         }
 
         // 3. provider calc price and publish price info
-        BlockingDeque<byte[]> providerBlockingDeque = new LinkedBlockingDeque<>();
-        ProviderSchedule.start(providerBlockingDeque);
+        BlockingDeque<byte[]> priceMessages = new LinkedBlockingDeque<>();
+        ProviderSchedule.start(priceMessages);
 
         // 4. subscribe result
-        Thread subscribeThread = new Thread(new SubscribeThread(providerBlockingDeque));
+        Thread subscribeThread = new Thread(new SubscribeThread(priceMessages));
         subscribeThread.start();
 
         try {
@@ -49,6 +47,7 @@ public class AssetsApplication {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             ProviderSchedule.shutdown();
             subscribeThread.interrupt();
+            priceMessages.clear();
         }));
     }
 

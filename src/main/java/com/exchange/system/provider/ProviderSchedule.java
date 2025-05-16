@@ -19,5 +19,4 @@ public class ProviderSchedule {
     public static void shutdown() {
         scheduler.shutdown();
     }
-
 }

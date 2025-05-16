@@ -1,6 +1,5 @@
 package com.exchange.system.provider;
 
-
 import com.exchange.system.data.db.sqllite.DB;
 import com.exchange.system.model.ProductType;
 import com.exchange.system.model.StockData;
@@ -21,7 +20,6 @@ public class ProviderThread implements Runnable {
 
     @Override
     public void run() {
-
         try {
             List<MessageItem> messageItemList = new ArrayList<>();
             HashMap<String, Boolean> priceChangeMap = new HashMap<>();
@@ -36,14 +34,13 @@ public class ProviderThread implements Runnable {
                             stockData.getExpectedReturn(),
                             stockData.getAnnualizedStandardDeviation()
                     );
-                    if (!PriceUtil
-                            .areEqual(newPrice, stockData.getCurPrice(), PriceUtil.EPSILON)) {
+                    if (!PriceUtil.areEqual(newPrice, stockData.getCurPrice(), PriceUtil.EPSILON)) {
                         priceChangeMap.put(stockData.getSymbol(), true);
+                        DB.updateStockPrice(stockData.getSymbol(), newPrice);
                     }
 
                     stockData.setCurPrice(newPrice);
                     stockPriceMap.put(stockData.getSymbol(), newPrice);
-                    //1. update db
                 }
             }
 
@@ -52,7 +49,7 @@ public class ProviderThread implements Runnable {
                 double stockPrice = stockPriceMap.get(symbols[0]);
                 if (stockData.getProductType().equals(ProductType.EUROPEAN_PUT_OPTIONS)) {
                     //calc put option
-                    double newPutPrice = EuropeanOptionPriceCalc.calcP(
+                    double newPutPrice = EuropeanOptionPriceCalc.calcPutPrice(
                             stockPrice,
                             stockData.getStrikePrice(),
                             stockData.getAnnualizedStandardDeviation(),
@@ -65,7 +62,7 @@ public class ProviderThread implements Runnable {
                     messageItemList.add(messageItem);
                 } else if (stockData.getProductType().equals(ProductType.EUROPEAN_CALL_OPTIONS)) {
                     //calc call option
-                    double newCallPrice = EuropeanOptionPriceCalc.calcC(
+                    double newCallPrice = EuropeanOptionPriceCalc.calcCallPrice(
                             stockPrice,
                             stockData.getStrikePrice(),
                             stockData.getAnnualizedStandardDeviation(),

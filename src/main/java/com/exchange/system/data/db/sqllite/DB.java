@@ -3,6 +3,7 @@ package com.exchange.system.data.db.sqllite;
 import com.exchange.system.model.StockData;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,7 +13,7 @@ import java.util.List;
 public class DB {
     public static final String URL = "jdbc:sqlite:asset.db";
 
-    public static boolean createDateBaseAndInitData() {
+    public static boolean createDatabaseAndInitData() {
         try(Connection connection = DriverManager.getConnection(URL);
                         Statement statement = connection.createStatement()) {
             statement.setQueryTimeout(30);
@@ -69,5 +70,21 @@ public class DB {
             e.printStackTrace(System.err);
         }
         return data;
+    }
+
+    public static boolean updateStockPrice(String symbol, double price) {
+        int rowsAffected = 0;
+        String UPDATE_SQL = "UPDATE SECURITY_DEFINITIONS SET cur_price = ? WHERE symbol = ?";
+        try(Connection connection = DriverManager.getConnection(URL);
+                PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
+            statement.setDouble(1, price);
+            statement.setString(2, symbol);
+            statement.setQueryTimeout(30);
+            rowsAffected = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+            return false;
+        }
+        return rowsAffected > 0;
     }
 }
